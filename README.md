@@ -1,51 +1,34 @@
-# gudlift-registration
+# GUDLFT APP
 
-1. Why
+Ce projet a été réalisé dans le cadre de la formation OpenClassrooms *Développeur d'application - Python*.
 
+→ Amélioration d'une application Python à l'aide du framework de tests **Pytest**.
 
-    This is a proof of concept (POC) project to show a light-weight version of our competition booking platform. The aim is the keep things as light as possible, and use feedback from the users to iterate.
+## Présentation de l'application
 
-2. Getting Started
+L'application initiale à tester et débugger a été clonée depuis le dépôt suivant : https://github.com/OpenClassrooms-Student-Center/Python_Testing
 
-    This project uses the following technologies:
+L'application sert à la gestion d'inscriptions de clubs sportifs à des compétitions.
 
-    * Python v3.x+
+Les clubs gagnent des points via la mise en place de compétitions. Les clubs peuvent inscrire leurs membres à des compétitions en utilisant les points accumulés.
 
-    * [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+Exemple de parcours utilisateur :
 
-        Whereas Django does a lot of things for us out of the box, Flask allows us to add only what we need. 
-     
+- Le/La secrétaire du club se connecte à l'application.
+- Le/La secrétaire identifie une compétition à venir, il/elle peut voir le nombre d'inscriptions disponibles et peut alors utiliser les points du club pour inscrire des membres à la compétition sélectionnée.
+- Le/La secrétaire peut également consulter la liste des points des autres clubs.
 
-    * [Virtual environment](https://virtualenv.pypa.io/en/stable/installation.html)
+A noter qu'il n'est pas possible d'inscrire plus de 12 membres d'un club à une compétition donnée.
 
-        This ensures you'll be able to install the correct packages without interfering with Python on your machine.
+## Lancement de l'application
+- créer un environnement virtuel : python -m venv [nom]
+- activer l'environnement virtuel : [nom]\Scripts\activate
+- installer les packages : pip install -r requirements.txt
+- lancer le serveur de développement : flask run
+- se rendre à l'adresse : http://127.0.0.1:5000/
 
-        Before you begin, please ensure you have this installed globally. 
+## Conventions de nommage
 
+L'ajout de tests concernant une fonctionnalité de l'application, un bug ou une amélioration font l'objet de création de branche.
 
-3. Installation
-
-    - After cloning, change into the directory and type <code>virtualenv .</code>. This will then set up a a virtual python environment within that directory.
-
-    - Next, type <code>source bin/activate</code>. You should see that your command prompt has changed to the name of the folder. This means that you can install packages in here without affecting affecting files outside. To deactivate, type <code>deactivate</code>
-
-    - Rather than hunting around for the packages you need, you can install in one step. Type <code>pip install -r requirements.txt</code>. This will install all the packages listed in the respective file. If you install a package, make sure others know by updating the requirements.txt file. An easy way to do this is <code>pip freeze > requirements.txt</code>
-
-    - Flask requires that you set an environmental variable to the python file. However you do that, you'll want to set the file to be <code>server.py</code>. Check [here](https://flask.palletsprojects.com/en/1.1.x/quickstart/#a-minimal-application) for more details
-
-    - You should now be ready to test the application. In the directory, type either <code>flask run</code> or <code>python -m flask run</code>. The app should respond with an address you should be able to go to using your browser.
-
-4. Current Setup
-
-    The app is powered by [JSON files](https://www.tutorialspoint.com/json/json_quick_guide.htm). This is to get around having a DB until we actually need one. The main ones are:
-     
-    * competitions.json - list of competitions
-    * clubs.json - list of clubs with relevant information. You can look here to see what email addresses the app will accept for login.
-
-5. Testing
-
-    You are free to use whatever testing framework you like-the main thing is that you can show what tests you are using.
-
-    We also like to show how well we're testing, so there's a module called 
-    [coverage](https://coverage.readthedocs.io/en/coverage-5.1/) you should add to your project.
-
+Le nom de la branche suit le format : **<fonctionnalité/bug/amélioration>/nom-descriptif**
