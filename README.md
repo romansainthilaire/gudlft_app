@@ -29,6 +29,6 @@ A noter qu'il n'est pas possible d'inscrire plus de 12 membres d'un club à une 
 
 ## Conventions de nommage
 
-L'ajout de tests concernant une fonctionnalité de l'application, un bug ou une amélioration font l'objet de création de branche.
+L'ajout de tests concernant une fonctionnalité de l'application, un bug ou une amélioration fait systématiquement l'objet de création d'une branche.
 
 Le nom de la branche suit le format : **<fonctionnalité/bug/amélioration>/nom-descriptif**
