@@ -40,3 +40,10 @@ def test_get_booking_page_with_registered_future_competition_and_registered_club
     assert response.status_code == 200
     assert bytes(future_competition["name"], "utf8") in response.data
     assert bytes(future_competition["numberOfPlaces"], "utf8") in response.data
+
+
+def test_get_booking_page_with_unregistered_competition(client):
+    club = clubs[0]
+    competition = {"name": "Competition does not exist", "date": "9999-01-01 00:00:00", "numberOfPlaces": "10"}
+    response = client.get(f"/book/{competition['name']}/{club['name']}", follow_redirects=True)
+    assert response.status_code == 404
