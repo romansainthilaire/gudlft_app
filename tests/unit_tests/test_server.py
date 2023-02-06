@@ -38,7 +38,7 @@ def test_get_booking_page_with_unregistered_competition_or_unregistered_club(cli
     assert response.status_code == 404
 
 
-def test_get_booking_page_with_registered_future_competition_and_registered_club(client):
+def test_get_booking_page_with_registered_future_competition(client):
     club = clubs[0]
     future_competition = [
         c for c in competitions if datetime.strptime(c["date"], '%Y-%m-%d %H:%M:%S') > datetime.now()
