@@ -50,3 +50,15 @@ def test_get_booking_page_with_registered_past_competition(client):
     past_competition = past_competitions[0]
     response = client.get(f"/book/{past_competition['name']}/{club['name']}", follow_redirects=True)
     assert response.status_code == 403
+
+
+def test_update_points_available_after_purchasing_places(client):
+    club = clubs[0]
+    club["points"] = 10
+    future_competition = future_competitions[0]
+    future_competition["numberOfPlaces"] = 20
+    data = {"places": 5}
+    client.post("/purchase_places", data=data)
+    assert club["points"] == 5
+    response = client.get("/purchase_places")
+    assert b"Points available: 5" in response.data
