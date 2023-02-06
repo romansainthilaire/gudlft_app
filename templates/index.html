@@ -8,13 +8,27 @@
 </head>
 
 <body>
+
     <h1>Welcome to the GUDLFT Registration Portal!</h1>
+
     <p>Please enter your secretary email to continue:</p>
+
     <form action="{{ url_for('show_summary') }}" method="POST">
         <label for="email">Email:</label>
         <input type="email" name="email" id="email">
         <button type="submit">Enter</button>
     </form>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li id="email-not-found-message">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif%}
+    {% endwith %}
+
 </body>
 
 </html>
