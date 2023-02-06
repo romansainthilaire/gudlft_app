@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from server import clubs, competitions
 
 
@@ -27,3 +29,14 @@ def test_logout(client):
     response = client.get("/logout", follow_redirects=True)
     assert response.status_code == 200
     assert b'type="email"' in response.data
+
+
+def test_get_booking_page_with_registered_future_competition_and_registered_club(client):
+    club = clubs[0]
+    future_competition = [
+        c for c in competitions if datetime.strptime(c["date"], '%Y-%m-%d %H:%M:%S') > datetime.now()
+        ][0]
+    response = client.get(f"/book/{future_competition['name']}/{club['name']}", follow_redirects=True)
+    assert response.status_code == 200
+    assert bytes(future_competition["name"], "utf8") in response.data
+    assert bytes(future_competition["numberOfPlaces"], "utf8") in response.data
