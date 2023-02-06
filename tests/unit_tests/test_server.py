@@ -14,3 +14,9 @@ def test_login_with_registered_email(client):
     assert bytes(club["points"], "utf8") in response.data
     for competition in competitions:
         assert bytes(competition["name"], "utf8") in response.data
+
+
+def test_login_with_unregistered_email(client):
+    data = {"email": "test@gmail.com"}
+    response = client.post("/show_summary", data=data)
+    assert response.status_code == 200
