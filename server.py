@@ -1,6 +1,6 @@
 import json
 
-from flask import Flask, render_template, request, redirect, flash, url_for
+from flask import Flask, render_template, request, redirect, flash, url_for, abort
 
 
 def load_clubs():
@@ -20,6 +20,11 @@ competitions = load_competitions()
 clubs = load_clubs()
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("error_pages/404.html"), 404
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -37,13 +42,12 @@ def show_summary():
 
 @app.route("/book/<competition>/<club>/")
 def book(competition, club):
-    club_found = [c for c in clubs if c["name"] == club][0]
-    competition_found = [c for c in competitions if c["name"] == competition][0]
-    if club_found and competition_found:
-        return render_template("booking.html", club=club_found, competition=competition_found)
-    else:
-        flash("Something went wrong-please try again")
-        return render_template("welcome.html", club=club, competitions=competitions)
+    try:
+        club_found = [c for c in clubs if c["name"] == club][0]
+        competition_found = [c for c in competitions if c["name"] == competition][0]
+    except IndexError:
+        abort(404)
+    return render_template("booking.html", club=club_found, competition=competition_found)
 
 
 @app.route("/purchase_places/", methods=["POST"])
