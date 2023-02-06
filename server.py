@@ -17,8 +17,11 @@ def load_competitions():
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "something_special"
 
-competitions = load_competitions()
 clubs = load_clubs()
+competitions = sorted(load_competitions(), key=lambda c: c["date"], reverse=True)
+date_format = "%Y-%m-%d %H:%M:%S"
+past_competitions = [c for c in competitions if datetime.strptime(c["date"], date_format) < datetime.now()]
+future_competitions = [c for c in competitions if datetime.strptime(c["date"], date_format) > datetime.now()]
 
 
 @app.errorhandler(403)
@@ -43,7 +46,12 @@ def show_summary():
     except IndexError:
         flash("Sorry, that email wasn't found.")
         return redirect(url_for("index"))
-    return render_template("welcome.html", club=club_found, competitions=competitions)
+    return render_template(
+        "welcome.html",
+        club=club_found,
+        competitions=competitions,
+        future_competitions=future_competitions
+        )
 
 
 @app.route("/book/<competition>/<club>/")
@@ -53,10 +61,7 @@ def book(competition, club):
         competition_found = [c for c in competitions if c["name"] == competition][0]
     except IndexError:
         abort(404)
-    future_competitions = [
-        c for c in competitions if datetime.strptime(c["date"], "%Y-%m-%d %H:%M:%S") > datetime.now()
-        ]
-    if competition_found not in future_competitions:
+    if competition_found in past_competitions:
         abort(403)
     return render_template("booking.html", club=club_found, competition=competition_found)
 
