@@ -41,7 +41,7 @@ def test_get_booking_page_with_unregistered_competition_or_unregistered_club(cli
 def test_get_booking_page_with_registered_future_competition(client):
     club = clubs[0]
     future_competition = [
-        c for c in competitions if datetime.strptime(c["date"], '%Y-%m-%d %H:%M:%S') > datetime.now()
+        c for c in competitions if datetime.strptime(c["date"], "%Y-%m-%d %H:%M:%S") > datetime.now()
         ][0]
     response = client.get(f"/book/{future_competition['name']}/{club['name']}", follow_redirects=True)
     assert response.status_code == 200
@@ -52,7 +52,7 @@ def test_get_booking_page_with_registered_future_competition(client):
 def test_get_booking_page_with_registered_past_competition(client):
     club = clubs[0]
     past_competition = [
-        c for c in competitions if datetime.strptime(c["date"], '%Y-%m-%d %H:%M:%S') < datetime.now()
+        c for c in competitions if datetime.strptime(c["date"], "%Y-%m-%d %H:%M:%S") < datetime.now()
         ][0]
     response = client.get(f"/book/{past_competition['name']}/{club['name']}", follow_redirects=True)
     assert response.status_code == 403

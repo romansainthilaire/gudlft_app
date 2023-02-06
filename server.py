@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 from flask import Flask, render_template, request, redirect, flash, url_for, abort
 
@@ -18,6 +19,11 @@ app.config["SECRET_KEY"] = "something_special"
 
 competitions = load_competitions()
 clubs = load_clubs()
+
+
+@app.errorhandler(403)
+def forbidden(e):
+    return render_template("error_pages/403.html"), 403
 
 
 @app.errorhandler(404)
@@ -47,6 +53,11 @@ def book(competition, club):
         competition_found = [c for c in competitions if c["name"] == competition][0]
     except IndexError:
         abort(404)
+    future_competitions = [
+        c for c in competitions if datetime.strptime(c["date"], "%Y-%m-%d %H:%M:%S") > datetime.now()
+        ]
+    if competition_found not in future_competitions:
+        abort(403)
     return render_template("booking.html", club=club_found, competition=competition_found)
 
 
