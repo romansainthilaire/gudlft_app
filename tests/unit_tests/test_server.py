@@ -57,8 +57,8 @@ def test_update_points_available_after_purchasing_places(client):
     club["points"] = 10
     future_competition = future_competitions[0]
     future_competition["numberOfPlaces"] = 20
-    data = {"places": 5}
-    client.post("/purchase_places", data=data)
+    data = {"club": club["name"], "competition": future_competition["name"], "places": 5}
+    response = client.post("/purchase_places", data=data, follow_redirects=True)
     assert club["points"] == 5
-    response = client.get("/purchase_places")
-    assert b"Points available: 5" in response.data
+    assert response.status_code == 200
+    assert b"booking-complete-message" in response.data
