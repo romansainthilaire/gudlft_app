@@ -95,3 +95,14 @@ def test_clubs_cannot_book_more_than_12_places_per_competition(client):
     response = client.post("/purchase_places", data=data, follow_redirects=True)
     assert response.status_code == 200
     assert b"12-places-max-message" in response.data
+
+
+def test_book_negative_number_of_places(client):
+    club = clubs[0]
+    club["points"] = 10
+    future_competition = future_competitions[0]
+    future_competition["numberOfPlaces"] = 20
+    data = {"club": club["name"], "competition": future_competition["name"], "places": -5}
+    response = client.post("/purchase_places", data=data, follow_redirects=True)
+    assert response.status_code == 200
+    assert b"negative-number-of-places-message" in response.data
