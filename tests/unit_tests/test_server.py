@@ -62,3 +62,14 @@ def test_update_points_available_after_purchasing_places(client):
     assert club["points"] == 5
     assert response.status_code == 200
     assert b"booking-complete-message" in response.data
+
+
+def test_purchase_places_without_enough_points(client):
+    club = clubs[0]
+    club["points"] = 5
+    future_competition = future_competitions[0]
+    future_competition["numberOfPlaces"] = 20
+    data = {"club": club["name"], "competition": future_competition["name"], "places": 10}
+    response = client.post("/purchase_places", data=data, follow_redirects=True)
+    assert response.status_code == 200
+    assert b"not-enough-points-message" in response.data
