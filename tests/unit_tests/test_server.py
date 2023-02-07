@@ -83,4 +83,4 @@ def test_purchase_more_places_than_places_left(client):
     data = {"club": club["name"], "competition": future_competition["name"], "places": 2}
     response = client.post("/purchase_places", data=data, follow_redirects=True)
     assert response.status_code == 200
-    assert b"not-enough-places-left" in response.data
+    assert b"not-enough-places-left-message" in response.data

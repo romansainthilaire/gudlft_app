@@ -22,7 +22,11 @@
 {% if messages %}
 <ul>
     {% for message in messages %}
+    {% if message.endswith("points.") %}
     <li id="not-enough-points-message">{{ message }}</li>
+    {% elif message.endswith("left.") %}
+    <li id="not-enough-places-left-message">{{ message }}</li>
+    {% endif %}
     {% endfor %}
 </ul>
 {% endif%}

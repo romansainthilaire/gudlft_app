@@ -71,7 +71,10 @@ def purchase_places():
     club_found = [c for c in clubs if c["name"] == request.form["club"]][0]  # type:ignore
     competition_found = [c for c in competitions if c["name"] == request.form["competition"]][0]  # type:ignore
     places_purchased = int(request.form["places"])  # type:ignore
-    if int(club_found["points"]) < places_purchased:
+    if places_purchased > int(competition_found["numberOfPlaces"]):
+        flash(f"You cannot buy so many places. There are only {competition_found['numberOfPlaces']} places left.")
+        return redirect(url_for("book", competition=competition_found["name"], club=club_found["name"]))
+    elif int(club_found["points"]) < places_purchased:
         flash(f"You cannot buy so many places. You only have {club_found['points']} points.")
         return redirect(url_for("book", competition=competition_found["name"], club=club_found["name"]))
     competition_found["numberOfPlaces"] = int(competition_found["numberOfPlaces"]) - places_purchased
