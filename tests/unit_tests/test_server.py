@@ -106,3 +106,11 @@ def test_book_negative_number_of_places(client):
     response = client.post("/purchase_places", data=data, follow_redirects=True)
     assert response.status_code == 200
     assert b"negative-number-of-places-message" in response.data
+
+
+def test_points_display_board(client):
+    response = client.get("/clubs")
+    assert response.status_code == 200
+    for club in clubs:
+        assert bytes(club["name"], "utf8") in response.data
+        assert bytes(str(club["points"]), "utf8") in response.data
