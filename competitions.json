@@ -14,6 +14,11 @@
             "name": "X Games 9999",
             "date": "9999-01-01 00:00:00",
             "numberOfPlaces": "32"
+        },
+        {
+            "name": "Y Games 9999",
+            "date": "9999-01-01 00:00:00",
+            "numberOfPlaces": "2"
         }
     ]
 }
