@@ -84,3 +84,14 @@ def test_purchase_more_places_than_places_left(client):
     response = client.post("/purchase_places", data=data, follow_redirects=True)
     assert response.status_code == 200
     assert b"not-enough-places-left-message" in response.data
+
+
+def test_clubs_cannot_book_more_than_12_places_per_competition(client):
+    club = clubs[0]
+    club["points"] = 20
+    future_competition = future_competitions[0]
+    future_competition["numberOfPlaces"] = 30
+    data = {"club": club["name"], "competition": future_competition["name"], "places": 15}
+    response = client.post("/purchase_places", data=data, follow_redirects=True)
+    assert response.status_code == 200
+    assert b"12-places-max-message" in response.data
