@@ -90,24 +90,23 @@ def purchase_places():
             flash("You can book 12 places max per competition.")
             return redirect(url_for("book", competition=competition_found["name"], club=club_found["name"]))
 
-    else:
-        competition_found["numberOfPlaces"] = competition_found["numberOfPlaces"] - places_purchased
-        club_found["points"] = club_found["points"] - places_purchased
+    competition_found["numberOfPlaces"] = competition_found["numberOfPlaces"] - places_purchased
+    club_found["points"] = club_found["points"] - places_purchased
 
-        if competition_found["name"] in club_found["competitions"]:
-            club_found["competitions"][competition_found["name"]] = (
-                club_found["competitions"][competition_found["name"]] - places_purchased
-                )
-        else:
-            club_found["competitions"][competition_found["name"]] = places_purchased
-
-        flash("Great-booking complete!")
-        return render_template(
-            "welcome.html",
-            club=club_found,
-            competitions=competitions,
-            future_competitions=future_competitions
+    if competition_found["name"] in club_found["competitions"]:
+        club_found["competitions"][competition_found["name"]] = (
+            club_found["competitions"][competition_found["name"]] + places_purchased
             )
+    else:
+        club_found["competitions"][competition_found["name"]] = places_purchased
+
+    flash("Great-booking complete!")
+    return render_template(
+        "welcome.html",
+        club=club_found,
+        competitions=competitions,
+        future_competitions=future_competitions
+        )
 
 
 # TODO: Add route for points display
