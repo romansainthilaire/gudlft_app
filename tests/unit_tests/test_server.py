@@ -73,3 +73,14 @@ def test_purchase_places_without_enough_points(client):
     response = client.post("/purchase_places", data=data, follow_redirects=True)
     assert response.status_code == 200
     assert b"not-enough-points-message" in response.data
+
+
+def test_purchase_more_places_than_places_left(client):
+    club = clubs[0]
+    club["points"] = 5
+    future_competition = future_competitions[0]
+    future_competition["numberOfPlaces"] = 1
+    data = {"club": club["name"], "competition": future_competition["name"], "places": 2}
+    response = client.post("/purchase_places", data=data, follow_redirects=True)
+    assert response.status_code == 200
+    assert b"not-enough-places-left" in response.data
