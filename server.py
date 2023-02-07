@@ -100,7 +100,9 @@ def purchase_places():
     else:
         club_found["competitions"][competition_found["name"]] = places_purchased
 
-    flash("Great-booking complete!")
+    if places_purchased > 0:
+        flash("Great-booking complete!")
+
     return render_template(
         "welcome.html",
         club=club_found,

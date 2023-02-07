@@ -35,8 +35,11 @@
             <p>
                 <strong>{{ competition["name"] }}</strong><br>
                 Date: {{ competition["date"] }}<br>
-                Number of Places: {{ competition["numberOfPlaces"] }}<br>
-                {% if club["points"]|int > 0 and competition["numberOfPlaces"]|int > 0 and competition in future_competitions %}
+                Places left: {{ competition["numberOfPlaces"] }}<br>
+                {% if competition["name"] in club["competitions"] and club["competitions"][competition["name"]] > 0 %}
+                Places booked: {{ club["competitions"][competition["name"]] }}<br>
+                {% endif %}
+                {% if club["points"] > 0 and competition["numberOfPlaces"] > 0 and competition in future_competitions %}
                 <a href="{{ url_for('book', competition=competition['name'], club=club['name']) }}">Book Places</a>
                 {%endif%}
             </p>
