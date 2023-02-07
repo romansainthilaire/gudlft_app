@@ -111,6 +111,14 @@ def purchase_places():
 
 # TODO: Add route for points display
 
+@app.route("/clubs/<club>/")
+def clubs_list(club):
+    try:
+        club_found = [c for c in clubs if c["name"] == club][0]
+    except IndexError:
+        abort(404)
+    return render_template("clubs_list.html", club=club_found, clubs=clubs)
+
 
 @app.route("/logout/")
 def logout():

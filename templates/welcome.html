@@ -11,7 +11,9 @@
 
     <h2>Welcome, {{ club["email"] }}</h2>
     
-    <a href="{{ url_for('logout') }}">Logout</a>
+    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+
+    <p><a href="{{ url_for('clubs_list', club=club['name']) }}">See all clubs</a></p>
 
     {% with messages = get_flashed_messages() %}
     {% if messages %}
