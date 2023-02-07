@@ -11,7 +11,7 @@ def test_login_with_registered_email(client):
     data = {"email": club["email"]}
     response = client.post("/show_summary", data=data, follow_redirects=True)
     assert response.status_code == 200
-    assert bytes(club["points"], "utf8") in response.data
+    assert bytes(str(club["points"]), "utf8") in response.data
     for competition in competitions:
         assert bytes(competition["name"], "utf8") in response.data
 
@@ -42,7 +42,7 @@ def test_get_booking_page_with_registered_future_competition(client):
     response = client.get(f"/book/{future_competition['name']}/{club['name']}", follow_redirects=True)
     assert response.status_code == 200
     assert bytes(future_competition["name"], "utf8") in response.data
-    assert bytes(future_competition["numberOfPlaces"], "utf8") in response.data
+    assert bytes(str(future_competition["numberOfPlaces"]), "utf8") in response.data
 
 
 def test_get_booking_page_with_registered_past_competition(client):
