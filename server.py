@@ -68,24 +68,42 @@ def book(competition, club):
 
 @app.route("/purchase_places/", methods=["POST"])
 def purchase_places():
+
     club_found = [c for c in clubs if c["name"] == request.form["club"]][0]  # type:ignore
     competition_found = [c for c in competitions if c["name"] == request.form["competition"]][0]  # type:ignore
     places_purchased = int(request.form["places"])  # type:ignore
+
     if places_purchased > int(competition_found["numberOfPlaces"]):
         flash(f"You cannot buy so many places. There are only {competition_found['numberOfPlaces']} places left.")
         return redirect(url_for("book", competition=competition_found["name"], club=club_found["name"]))
+
     elif int(club_found["points"]) < places_purchased:
         flash(f"You cannot buy so many places. You only have {club_found['points']} points.")
         return redirect(url_for("book", competition=competition_found["name"], club=club_found["name"]))
-    competition_found["numberOfPlaces"] = int(competition_found["numberOfPlaces"]) - places_purchased
-    club_found["points"] = int(club_found["points"]) - places_purchased
-    flash("Great-booking complete!")
-    return render_template(
-        "welcome.html",
-        club=club_found,
-        competitions=competitions,
-        future_competitions=future_competitions
-        )
+
+    elif competition_found["name"] in club_found["competitions"]:
+        if club_found["competitions"][competition_found["name"]] + places_purchased > 12:
+            flash("You can book 12 places max per competition.")
+            return redirect(url_for("book", competition=competition_found["name"], club=club_found["name"]))
+
+    else:
+        competition_found["numberOfPlaces"] = int(competition_found["numberOfPlaces"]) - places_purchased
+        club_found["points"] = int(club_found["points"]) - places_purchased
+
+        if competition_found["name"] in club_found["competitions"]:
+            club_found["competitions"][competition_found["name"]] = (
+                int(club_found["competitions"][competition_found["name"]]) - places_purchased
+                )
+        else:
+            club_found["competitions"][competition_found["name"]] = places_purchased
+
+        flash("Great-booking complete!")
+        return render_template(
+            "welcome.html",
+            club=club_found,
+            competitions=competitions,
+            future_competitions=future_competitions
+            )
 
 
 # TODO: Add route for points display

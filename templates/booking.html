@@ -10,6 +10,10 @@
 <body>
     <h2>{{ competition["name"] }}</h2>
     <p>Places available: {{ competition["numberOfPlaces"] }}</p>
+    <p>Points available: {{ club['points'] }}</p>
+    {% if competition["name"] in club["competitions"] %}
+    <p>→ You already booked {{ club['competitions'][competition['name']] }} places for this competition.</p>
+    {% endif %}
     <form action="{{ url_for('purchase_places') }}" method="POST">
         <input type="hidden" name="club" value="{{ club['name'] }}">
         <input type="hidden" name="competition" value="{{ competition['name'] }}">
@@ -26,6 +30,8 @@
     <li id="not-enough-points-message">{{ message }}</li>
     {% elif message.endswith("left.") %}
     <li id="not-enough-places-left-message">{{ message }}</li>
+    {% elif message.endswith("competition.") %}
+    <li id="12-places-max-message">{{ message }}</li>
     {% endif %}
     {% endfor %}
 </ul>
