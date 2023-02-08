@@ -1,5 +1,9 @@
 from server import clubs, competitions, past_competitions, future_competitions
 
+club = clubs[0]
+past_competition = past_competitions[0]
+future_competition = future_competitions[0]
+
 
 def test_index(client):
     response = client.get("/")
@@ -7,7 +11,6 @@ def test_index(client):
 
 
 def test_login_with_registered_email(client):
-    club = clubs[0]
     data = {"email": club["email"]}
     response = client.post("/show_summary", data=data, follow_redirects=True)
     assert response.status_code == 200
@@ -37,8 +40,6 @@ def test_get_booking_page_with_unregistered_competition_or_unregistered_club(cli
 
 
 def test_get_booking_page_with_registered_future_competition(client):
-    club = clubs[0]
-    future_competition = future_competitions[0]
     response = client.get(f"/book/{future_competition['name']}/{club['name']}", follow_redirects=True)
     assert response.status_code == 200
     assert bytes(future_competition["name"], "utf8") in response.data
@@ -46,16 +47,12 @@ def test_get_booking_page_with_registered_future_competition(client):
 
 
 def test_get_booking_page_with_registered_past_competition(client):
-    club = clubs[0]
-    past_competition = past_competitions[0]
     response = client.get(f"/book/{past_competition['name']}/{club['name']}", follow_redirects=True)
     assert response.status_code == 403
 
 
 def test_update_points_available_after_purchasing_places(client):
-    club = clubs[0]
     club["points"] = 10
-    future_competition = future_competitions[0]
     future_competition["numberOfPlaces"] = 20
     data = {"club": club["name"], "competition": future_competition["name"], "places": 5}
     response = client.post("/purchase_places", data=data, follow_redirects=True)
@@ -65,9 +62,7 @@ def test_update_points_available_after_purchasing_places(client):
 
 
 def test_purchase_places_without_enough_points(client):
-    club = clubs[0]
     club["points"] = 5
-    future_competition = future_competitions[0]
     future_competition["numberOfPlaces"] = 20
     data = {"club": club["name"], "competition": future_competition["name"], "places": 10}
     response = client.post("/purchase_places", data=data, follow_redirects=True)
@@ -76,9 +71,7 @@ def test_purchase_places_without_enough_points(client):
 
 
 def test_purchase_more_places_than_places_left(client):
-    club = clubs[0]
     club["points"] = 5
-    future_competition = future_competitions[0]
     future_competition["numberOfPlaces"] = 1
     data = {"club": club["name"], "competition": future_competition["name"], "places": 2}
     response = client.post("/purchase_places", data=data, follow_redirects=True)
@@ -87,9 +80,7 @@ def test_purchase_more_places_than_places_left(client):
 
 
 def test_clubs_cannot_book_more_than_12_places_per_competition(client):
-    club = clubs[0]
     club["points"] = 20
-    future_competition = future_competitions[0]
     future_competition["numberOfPlaces"] = 30
     data = {"club": club["name"], "competition": future_competition["name"], "places": 15}
     response = client.post("/purchase_places", data=data, follow_redirects=True)
@@ -98,9 +89,7 @@ def test_clubs_cannot_book_more_than_12_places_per_competition(client):
 
 
 def test_book_negative_number_of_places(client):
-    club = clubs[0]
     club["points"] = 10
-    future_competition = future_competitions[0]
     future_competition["numberOfPlaces"] = 20
     data = {"club": club["name"], "competition": future_competition["name"], "places": -5}
     response = client.post("/purchase_places", data=data, follow_redirects=True)
@@ -109,9 +98,8 @@ def test_book_negative_number_of_places(client):
 
 
 def test_points_display_board(client):
-    club = clubs[0]
     response = client.get(f"/clubs/{club['name']}", follow_redirects=True)
     assert response.status_code == 200
-    for club in clubs:
-        assert bytes(club["name"], "utf8") in response.data
-        assert bytes(str(club["points"]), "utf8") in response.data
+    for c in clubs:
+        assert bytes(c["name"], "utf8") in response.data
+        assert bytes(str(c["points"]), "utf8") in response.data
