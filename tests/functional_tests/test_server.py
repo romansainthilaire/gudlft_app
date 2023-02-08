@@ -1,6 +1,7 @@
-from server import clubs
+from server import clubs, future_competitions
 
 club = clubs[0]
+competition = future_competitions[0]
 
 BASE_URL = "http://localhost:5000"
 
@@ -36,3 +37,28 @@ def test_login_clubs_list_logout(page):
     # logout
     page.get_by_role("link", name="Logout").click()
     assert page.title() == "Registration | GUDLFT"
+
+
+def test_login_book_10_places(page):
+    page.goto(BASE_URL)
+    purchased_places = 10
+
+    # login
+    page.get_by_label("Email:").click()
+    page.get_by_label("Email:").fill(club["email"])
+    page.get_by_role("button", name="Enter").click()
+
+    # book places
+    (page.get_by_role("paragraph")
+     .filter(has_text=(
+         f"{competition['name']} " +
+         f"Date: {competition['date']} " +
+         f"Places left: {competition['numberOfPlaces']} " +
+         "Book Places"))
+     .get_by_role("link", name="Book Places")
+     .click())
+    page.get_by_label("How many places?").click()
+    page.get_by_label("How many places?").fill(str(purchased_places))
+    page.get_by_role("button", name="Book").click()
+    assert page.title() == "Summary | GUDLFT"
+    assert page.query_selector("#points-available").inner_text() == f"Points available: {club['points'] - 10}"
