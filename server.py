@@ -77,15 +77,19 @@ def purchase_places():
         flash("You cannot book a negative number of places.")
         return redirect(url_for("book", competition=competition_found["name"], club=club_found["name"]))
 
-    elif places_purchased > competition_found["numberOfPlaces"]:
+    if places_purchased > competition_found["numberOfPlaces"]:
         flash(f"You cannot buy so many places. There are only {competition_found['numberOfPlaces']} places left.")
         return redirect(url_for("book", competition=competition_found["name"], club=club_found["name"]))
 
-    elif club_found["points"] < places_purchased:
+    if places_purchased > club_found["points"]:
         flash(f"You cannot buy so many places. You only have {club_found['points']} points.")
         return redirect(url_for("book", competition=competition_found["name"], club=club_found["name"]))
 
-    elif competition_found["name"] in club_found["competitions"]:
+    if places_purchased > 12:
+        flash("You can book 12 places max per competition.")
+        return redirect(url_for("book", competition=competition_found["name"], club=club_found["name"]))
+
+    if competition_found["name"] in club_found["competitions"]:
         if club_found["competitions"][competition_found["name"]] + places_purchased > 12:
             flash("You can book 12 places max per competition.")
             return redirect(url_for("book", competition=competition_found["name"], club=club_found["name"]))
@@ -97,10 +101,9 @@ def purchase_places():
         club_found["competitions"][competition_found["name"]] = (
             club_found["competitions"][competition_found["name"]] + places_purchased
             )
-    else:
-        club_found["competitions"][competition_found["name"]] = places_purchased
 
     if places_purchased > 0:
+        club_found["competitions"][competition_found["name"]] = places_purchased
         flash("Great-booking complete!")
 
     return render_template(
