@@ -24,13 +24,18 @@ A noter qu'il n'est pas possible d'inscrire plus de 12 membres d'un club à une 
 - créer un environnement virtuel : python -m venv [nom]
 - activer l'environnement virtuel : [nom]\Scripts\activate
 - installer les packages : pip install -r requirements.txt
+- installer playwright : playwright install
 
 ## Lancement de l'application
 - lancer le serveur de développement : flask run
 - se rendre à l'adresse : http://127.0.0.1:5000/
 
-## Exécution des tests
-- exécuter les tests unitaires : pytest -v
+## Exécution des tests unitaires
+- exécuter les tests unitaires : pytest tests/unit_tests/test_server.py -v
+
+## Exécution des tests fonctionnels
+- lancer le serveur de développement : flask run
+- exécuter les tests fonctionnels : pytest tests/functional_tests/test_server.py -v
 
 ## Conventions de nommage
 
