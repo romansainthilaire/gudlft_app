@@ -11,14 +11,14 @@
             "numberOfPlaces": 13
         },
         {
-            "name": "X Games 9999",
-            "date": "9999-01-01 00:00:00",
-            "numberOfPlaces": 32
+            "name": "X Games BMX Final",
+            "date": "2038-04-14 20:00:00",
+            "numberOfPlaces": 4
         },
         {
-            "name": "Y Games 9999",
-            "date": "9999-01-01 00:00:00",
-            "numberOfPlaces": 2
+            "name": "FISE Xperience Le Havre",
+            "date": "2052-08-25 15:25:00",
+            "numberOfPlaces": 24
         }
     ]
 }
