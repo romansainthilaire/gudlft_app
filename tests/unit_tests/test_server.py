@@ -20,7 +20,7 @@ def test_login_with_registered_email(client):
 
 
 def test_login_with_unregistered_email(client):
-    data = {"email": "test@gmail.com"}
+    data = {"email": "email.doesnotexist@gmail.com"}
     response = client.post("/show_summary", data=data, follow_redirects=True)
     assert response.status_code == 200
     assert b"email-not-found-message" in response.data
