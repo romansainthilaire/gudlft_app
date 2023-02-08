@@ -8,6 +8,8 @@ BASE_URL = "http://localhost:5000"
 
 def test_login_with_unregistered_email(page):
     page.goto(BASE_URL)
+
+    # try to login and get error message
     page.get_by_label("Email:").click()
     page.get_by_label("Email:").fill("email.doesnotexist@gmail.com")
     page.get_by_role("button", name="Enter").click()
@@ -25,7 +27,7 @@ def test_login_clubs_list_logout(page):
     assert page.title() == "Summary | GUDLFT"
     assert page.query_selector("h2").inner_text() == f"Welcome, {club['email']}"
 
-    # see list of clubs with their points
+    # go see list of clubs with their points
     page.get_by_role("link", name="See all clubs").click()
     assert page.title() == "List of clubs | GUDLFT"
     assert page.query_selector("strong").inner_text() == f"{club['name']} - {club['points']} points"
@@ -48,7 +50,7 @@ def test_login_book_15_places(page):
     page.get_by_label("Email:").fill(club["email"])
     page.get_by_role("button", name="Enter").click()
 
-    # book places
+    # try to book 15 places et get error message (12 places max)
     (page
      .get_by_role("paragraph")
      .filter(has_text=(
@@ -74,7 +76,7 @@ def test_login_book_10_places(page):
     page.get_by_label("Email:").fill(club["email"])
     page.get_by_role("button", name="Enter").click()
 
-    # book places
+    # book 10 places and get redirected to welcome page
     (page
      .get_by_role("paragraph")
      .filter(has_text=(
@@ -88,6 +90,7 @@ def test_login_book_10_places(page):
     page.get_by_label("How many places?").fill(str(purchased_places))
     page.get_by_role("button", name="Book").click()
     assert page.title() == "Summary | GUDLFT"
+    assert page.query_selector("li").inner_text() == "Great-booking complete!"
     assert (page
             .query_selector("#points-available")
             .inner_text() == f"Points available: {club['points'] - purchased_places}")
