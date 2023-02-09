@@ -12,15 +12,20 @@ def login(page, email):
     page.get_by_role("button", name="Enter").click()
 
 
-def test_login_with_unregistered_email(page):
+def purchase_n_places(page, n):
+    (page.get_by_role("paragraph").filter(has_text=(f"{competition['name']}"))
+         .get_by_role("link", name="Book Places").click())
+    page.get_by_label("How many places?").fill(str(n))
+    page.get_by_role("button", name="Book").click()
 
-    # try to login and get error message
+
+def test_login_with_unregistered_email(page):
     login(page, "email.doesnotexist@gmail.com")
     assert page.title() == "Registration | GUDLFT"
     assert page.query_selector("li").inner_text() == "Sorry, that email wasn't found."
 
 
-def test_login_clubs_list_logout(page):
+def test_login_then_see_clubs_list_then_logout(page):
 
     # login
     login(page, club["email"])
@@ -41,23 +46,8 @@ def test_login_clubs_list_logout(page):
     assert page.title() == "Registration | GUDLFT"
 
 
-def purchase_n_places(page, n):
-    (page
-     .get_by_role("paragraph")
-     .filter(has_text=(
-         f"{competition['name']} " +
-         f"Date: {competition['date']} " +
-         f"Places left: {competition['numberOfPlaces']} " +
-         "Book Places"))
-     .get_by_role("link", name="Book Places")
-     .click())
-    page.get_by_label("How many places?").fill(str(n))
-    page.get_by_role("button", name="Book").click()
+def test_login_then_purchase_15_places(page):
 
-
-def test_login_purchase_15_places(page):
-
-    # login
     login(page, club["email"])
 
     # try to book 15 places et get error message (12 places max)
@@ -66,9 +56,8 @@ def test_login_purchase_15_places(page):
     assert page.query_selector("li").inner_text() == "You can book 12 places max per competition."
 
 
-def test_login_purchase_10_places(page):
+def test_login_then_purchase_10_places(page):
 
-    # login
     login(page, club["email"])
 
     # book 10 places and get redirected to summary
