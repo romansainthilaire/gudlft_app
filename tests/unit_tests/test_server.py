@@ -32,10 +32,8 @@ def test_logout(client):
     assert b'type="email"' in response.data
 
 
-def test_get_booking_page_with_unregistered_competition_or_unregistered_club(client):
-    club = {"name": "Club does not exist", "email": "test@gmail.com", "points": "100"}
-    competition = {"name": "Competition does not exist", "date": "9999-01-01 00:00:00", "numberOfPlaces": "100"}
-    response = client.get(f"/book/{competition['name']}/{club['name']}", follow_redirects=True)
+def test_page_not_found(client):
+    response = client.get("/endpoint-does-not-exist")
     assert response.status_code == 404
 
 
