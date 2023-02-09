@@ -106,6 +106,7 @@ def test_purchase_empty_value(client):
     data = {"club": club["name"], "competition": future_competition["name"], "places": places_purchased}
     response = client.post("/purchase_places", data=data, follow_redirects=True)
     assert response.status_code == 200
+    assert b"invalid-number-of-places-message" in response.data
 
 
 def test_points_display_board(client):
