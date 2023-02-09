@@ -82,11 +82,17 @@ def purchase_places():
         return redirect(url_for("book", competition=competition_found["name"], club=club_found["name"]))
 
     if places_purchased > competition_found["numberOfPlaces"]:
-        flash(f"There are only {competition_found['numberOfPlaces']} places left.")
+        if competition_found['numberOfPlaces'] > 1:
+            flash(f"There are only {competition_found['numberOfPlaces']} places left.")
+        else:
+            flash("There is only 1 place left.")
         return redirect(url_for("book", competition=competition_found["name"], club=club_found["name"]))
 
     if places_purchased > club_found["points"]:
-        flash(f"You only have {club_found['points']} points.")
+        if club_found['points'] > 1:
+            flash(f"You only have {club_found['points']} points.")
+        else:
+            flash("You only have 1 point.")
         return redirect(url_for("book", competition=competition_found["name"], club=club_found["name"]))
 
     if places_purchased > 12:

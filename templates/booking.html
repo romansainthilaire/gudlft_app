@@ -32,10 +32,10 @@
         {% for message in messages %}
         {% if message.endswith("number.") %}
         <li id="invalid-number-of-places-message">{{ message }}</li>
-        {% elif message.endswith("points.") %}
-        <li id="not-enough-points-message">{{ message }}</li>
         {% elif message.endswith("left.") %}
         <li id="not-enough-places-left-message">{{ message }}</li>
+        {% elif message.endswith("points.") or message.endswith("point.") %}
+        <li id="not-enough-points-message">{{ message }}</li>
         {% elif message.endswith("competition.") %}
         <li id="12-places-max-message">{{ message }}</li>
         {% endif %}
