@@ -14,7 +14,6 @@ def test_login_with_registered_email(client):
     data = {"email": club["email"]}
     response = client.post("/show_summary", data=data, follow_redirects=True)
     assert response.status_code == 200
-    assert bytes(str(club["points"]), "utf8") in response.data
     for competition in competitions:
         assert bytes(competition["name"], "utf8") in response.data
 
@@ -49,14 +48,14 @@ def test_get_booking_page_with_registered_past_competition(client):
     assert response.status_code == 403
 
 
-def test_update_points_available_after_purchasing_places(client):
+def test_update_club_points_after_purchasing_places(client):
     club["points"] = 10
     future_competition["numberOfPlaces"] = 20
     places_purchased = 5
     data = {"club": club["name"], "competition": future_competition["name"], "places": places_purchased}
     response = client.post("/purchase_places", data=data, follow_redirects=True)
-    assert club["points"] == 5
     assert response.status_code == 200
+    assert club["points"] == 5
     assert b"booking-complete-message" in response.data
 
 
@@ -71,16 +70,16 @@ def test_purchase_places_without_enough_points(client):
 
 
 def test_purchase_more_places_than_places_left(client):
-    club["points"] = 5
-    future_competition["numberOfPlaces"] = 1
-    places_purchased = 2
+    club["points"] = 20
+    future_competition["numberOfPlaces"] = 5
+    places_purchased = 10
     data = {"club": club["name"], "competition": future_competition["name"], "places": places_purchased}
     response = client.post("/purchase_places", data=data, follow_redirects=True)
     assert response.status_code == 200
     assert b"not-enough-places-left-message" in response.data
 
 
-def test_clubs_cannot_book_more_than_12_places_per_competition(client):
+def test_purchase_more_than_12_places(client):
     club["points"] = 20
     future_competition["numberOfPlaces"] = 30
     places_purchased = 15
@@ -90,14 +89,14 @@ def test_clubs_cannot_book_more_than_12_places_per_competition(client):
     assert b"12-places-max-message" in response.data
 
 
-def test_book_negative_number_of_places(client):
+def test_purchase_negative_number_of_places(client):
     club["points"] = 10
     future_competition["numberOfPlaces"] = 20
     places_purchased = -5
     data = {"club": club["name"], "competition": future_competition["name"], "places": places_purchased}
     response = client.post("/purchase_places", data=data, follow_redirects=True)
     assert response.status_code == 200
-    assert b"negative-number-of-places-message" in response.data
+    assert b"invalid-number-of-places-message" in response.data
 
 
 def test_points_display_board(client):

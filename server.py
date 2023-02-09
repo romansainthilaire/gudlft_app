@@ -15,7 +15,7 @@ def load_competitions():
 
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "something_special"
+app.config["SECRET_KEY"] = "_jn8ofze0@e_6n^8ai@ae+n_bwg7m5b=-!-=x%h59cf*z3m%4+"
 
 clubs = load_clubs()
 competitions = sorted(load_competitions(), key=lambda c: c["date"], reverse=True)
@@ -42,7 +42,7 @@ def index():
 @app.route("/show_summary/", methods=["POST"])
 def show_summary():
     try:
-        club_found = [c for c in clubs if c["email"] == request.form["email"]][0]  # type:ignore
+        club_found = [c for c in clubs if c["email"] == request.form["email"]][0]
     except IndexError:
         flash("Sorry, that email wasn't found.")
         return redirect(url_for("index"))
@@ -69,20 +69,24 @@ def book(competition, club):
 @app.route("/purchase_places/", methods=["POST"])
 def purchase_places():
 
-    club_found = [c for c in clubs if c["name"] == request.form["club"]][0]  # type:ignore
-    competition_found = [c for c in competitions if c["name"] == request.form["competition"]][0]  # type:ignore
-    places_purchased = int(request.form["places"])  # type:ignore
+    club_found = [c for c in clubs if c["name"] == request.form["club"]][0]
+    competition_found = [c for c in competitions if c["name"] == request.form["competition"]][0]
 
-    if places_purchased < 0:
-        flash("You cannot book a negative number of places.")
+    try:
+        places_purchased = int(request.form["places"])
+    except ValueError:
+        places_purchased = 0
+
+    if places_purchased <= 0:
+        flash("Please enter a positive number.")
         return redirect(url_for("book", competition=competition_found["name"], club=club_found["name"]))
 
     if places_purchased > competition_found["numberOfPlaces"]:
-        flash(f"You cannot buy so many places. There are only {competition_found['numberOfPlaces']} places left.")
+        flash(f"There are only {competition_found['numberOfPlaces']} places left.")
         return redirect(url_for("book", competition=competition_found["name"], club=club_found["name"]))
 
     if places_purchased > club_found["points"]:
-        flash(f"You cannot buy so many places. You only have {club_found['points']} points.")
+        flash(f"You only have {club_found['points']} points.")
         return redirect(url_for("book", competition=competition_found["name"], club=club_found["name"]))
 
     if places_purchased > 12:
@@ -94,6 +98,8 @@ def purchase_places():
             flash("You can book 12 places max per competition.")
             return redirect(url_for("book", competition=competition_found["name"], club=club_found["name"]))
 
+    flash("Great-booking complete!")
+
     competition_found["numberOfPlaces"] = competition_found["numberOfPlaces"] - places_purchased
     club_found["points"] = club_found["points"] - places_purchased
 
@@ -101,10 +107,8 @@ def purchase_places():
         club_found["competitions"][competition_found["name"]] = (
             club_found["competitions"][competition_found["name"]] + places_purchased
             )
-
-    if places_purchased > 0:
+    else:
         club_found["competitions"][competition_found["name"]] = places_purchased
-        flash("Great-booking complete!")
 
     return render_template(
         "welcome.html",
@@ -113,8 +117,6 @@ def purchase_places():
         future_competitions=future_competitions
         )
 
-
-# TODO: Add route for points display
 
 @app.route("/clubs/<club>/")
 def clubs_list(club):

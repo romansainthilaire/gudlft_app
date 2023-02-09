@@ -11,9 +11,9 @@
 
     <h2>{{ competition["name"] }}</h2>
 
-    <p>Places available: {{ competition["numberOfPlaces"] }}</p>
+    <p>Places left: {{ competition["numberOfPlaces"] }}</p>
 
-    <p>Points available: {{ club["points"] }}</p>
+    <p>Your points: {{ club["points"] }}</p>
 
     {% if competition["name"] in club["competitions"] %}
     <p>→ You already booked {{ club["competitions"][competition["name"]] }} places for this competition.</p>
@@ -30,8 +30,8 @@
     {% if messages %}
     <ul>
         {% for message in messages %}
-        {% if message.endswith("places.") %}
-        <li id="negative-number-of-places-message">{{ message }}</li>
+        {% if message.endswith("number.") %}
+        <li id="invalid-number-of-places-message">{{ message }}</li>
         {% elif message.endswith("points.") %}
         <li id="not-enough-points-message">{{ message }}</li>
         {% elif message.endswith("left.") %}

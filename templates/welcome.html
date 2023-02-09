@@ -40,7 +40,10 @@
                 Places booked: {{ club["competitions"][competition["name"]] }}<br>
                 {% endif %}
                 {% if club["points"] > 0 and competition["numberOfPlaces"] > 0 and competition in future_competitions %}
+                {% if club["competitions"][competition["name"]] == 12 %}
+                {% else %}
                 <a href="{{ url_for('book', competition=competition['name'], club=club['name']) }}">Book Places</a>
+                {%endif%}
                 {%endif%}
             </p>
             <hr>
