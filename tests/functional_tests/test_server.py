@@ -64,6 +64,5 @@ def test_login_then_purchase_10_places(page):
     purchase_n_places(page, 10)
     assert page.title() == "Summary | GUDLFT"
     assert page.query_selector("li").inner_text() == "Great-booking complete!"
-    assert (page
-            .query_selector("#points-available")
-            .inner_text() == f"Points available: {club['points'] - 10}")
+    assert (page.query_selector("#points-available")
+                .inner_text() == f"Points available: {club['points'] - 10}")
