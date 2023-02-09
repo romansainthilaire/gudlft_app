@@ -50,7 +50,7 @@ def test_login_then_purchase_15_places(page):
 
     login(page, club["email"])
 
-    # try to book 15 places et get error message (12 places max)
+    # try to purchase 15 places et get error message (12 places max)
     purchase_n_places(page, 15)
     assert page.title() == f"Booking for {competition['name']} | GUDLFT"
     assert page.query_selector("li").inner_text() == "You can book 12 places max per competition."
@@ -60,7 +60,7 @@ def test_login_then_purchase_10_places(page):
 
     login(page, club["email"])
 
-    # book 10 places and get redirected to summary
+    # purchase 10 places and get redirected to summary
     purchase_n_places(page, 10)
     assert page.title() == "Summary | GUDLFT"
     assert page.query_selector("li").inner_text() == "Great-booking complete!"
