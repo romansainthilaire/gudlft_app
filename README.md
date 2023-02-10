@@ -37,6 +37,12 @@ A noter qu'il n'est pas possible d'inscrire plus de 12 membres d'un club à une 
 - lancer le serveur de développement : flask run
 - exécuter les tests fonctionnels : pytest tests/functional_tests/test_server.py -v
 
+## Génération du rapport de couverture de tests
+- lancer le serveur de développement : flask run
+- générer le rapport html : pytest --cov=. --cov-report html
+
+→ Un dossier "htmlcov" est créé à la racine du projet.
+
 ## Conventions de nommage
 
 L'ajout de tests concernant une fonctionnalité de l'application, un bug ou une amélioration fait systématiquement l'objet de création d'une branche.
