@@ -37,6 +37,14 @@ A noter qu'il n'est pas possible d'inscrire plus de 12 membres d'un club à une 
 - lancer le serveur de développement : flask run
 - exécuter les tests fonctionnels : pytest tests/functional_tests/test_server.py -v
 
+## Exécution des tests de performance
+- lancer le serveur de développement : flask run
+- lancer locust : locust -f tests/performance_tests/test_server.py
+- accéder à l'interface web locust : http://localhost:8089/
+
+<ins>Note :</ins><br>
+L'adresse du champ "Host" à renseigner est celle du serveur de développement (<span>http</span>://127.0.0.1:5000/). Les autres champs correspondent au nombre total d'utilisateurs à simuler et au nombre d'utilisateurs créés par seconde.
+
 ## Génération du rapport de couverture de tests
 - lancer le serveur de développement : flask run
 - générer le rapport html : pytest --cov=. --cov-report html
