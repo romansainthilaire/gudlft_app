@@ -1,5 +1,7 @@
 # GUDLFT APP
 
+![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
+
 Ce projet a été réalisé dans le cadre de la formation OpenClassrooms *Développeur d'application - Python*.
 
 → Amélioration d'une application Python à l'aide du framework de tests **Pytest**.
